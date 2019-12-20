@@ -38,19 +38,19 @@ First, let's import the package. `trutht` stands for *truth-table-generator*.
 import trutht
 ```
 
-A truth table has one column for each input variable (for example, *p* and *q*),
+A truth table has one column for each input variable (for example, *x* and *y*),
 and one final column showing all of the possible results of the logical
 operation that the table represents. If the input has only one list of strings,
 each string is considered an input variable:
 
 ```python
-print(trutht.Truths(['p', 'q', 'r']))
+print(trutht.Truths(['x', 'y', 'z']))
 ```
 ```
 +-----+-----+-----+
-|  p  |  q  |  r  |
+|  x  |  y  |  z  |
 |-----+-----+-----|
-|  0  |  0  |  0  |
+| 0   |  0  |  0  |
 |  0  |  0  |  1  |
 |  0  |  1  |  0  |
 |  0  |  1  |  1  |
@@ -65,33 +65,35 @@ A second list of strings can be passed with propositional expressions created
 with logical operators.
 
 ```python
-print(trutht.Truths(['p', 'q', 'r'], ['p and q and r', 'p or q or r', '(p or (not q)) imp r']))
+print(trutht.Truths(['x', 'y', 'z'], ['x and y and z', 'x or y or z', '(x or (not y)) imp z']))
 ```
 ```
-+-----+-----+-----+-----------------+---------------+--------------------+
-|  p  |  q  |  r  |  p and q and r  |  p or q or r  |  (p or (~q)) => r  |
-|-----+-----+-----+-----------------+---------------+--------------------|
-|  1  |  1  |  1  |        1        |       1       |         1          |
-|  1  |  1  |  0  |        0        |       1       |         0          |
-|  1  |  0  |  1  |        0        |       1       |         1          |
-|  1  |  0  |  0  |        0        |       1       |         0          |
-|  0  |  1  |  1  |        0        |       1       |         1          |
-|  0  |  1  |  0  |        0        |       1       |         1          |
-|  0  |  0  |  1  |        0        |       1       |         1          |
-|  0  |  0  |  0  |        0        |       0       |         0          |
-+-----+-----+-----+-----------------+---------------+--------------------+
++-----+-----+-----+-----------------+---------------+------------------------+
+|  x  |  y  |  z  |  x and y and z  |  x or y or z  |  (x or (not y)) imp z  |
+|-----+-----+-----+-----------------+---------------+------------------------|
+|  0  |  0  |  0  |        0        |       0       |            0           |
+|  0  |  0  |  1  |        0        |       1       |            1           |
+|  0  |  1  |  0  |        0        |       1       |            1           |
+|  0  |  1  |  1  |        0        |       1       |            1           |
+|  1  |  0  |  0  |        0        |       1       |            0           |
+|  1  |  0  |  1  |        0        |       1       |            1           |
+|  1  |  1  |  0  |        0        |       1       |            0           |
+|  1  |  1  |  1  |        1        |       1       |            1           |
++-----+-----+-----+-----------------+---------------+------------------------+
 ```
 
 ### Operators and their representations:
 
-- *negation*: `'not'`, `'-'`, `'~'`
+- *negation*: `'not'`
 - *logical disjunction*: `'or'`
 - *logical nor*: `'nor'`
-- *exclusive disjunction*: `'xor'`, `'!='`
+- *exclusive disjunction*: `'xor'`
 - *logical conjunction*:  `'and'`
-- *logical NAND*: `'nand'`
-- *material implication*: `'=>'`, `'implies'`
-- *logical biconditional*: `'='`
+- *logical NAND*: `'not_and'`
+- *material implication*: `'imp'`
+- *reversed material implication*: `'r_imp'`
+- *logical biconditional*: `'equ'`
+- *Reversed logical biconditional*: `'r_equ'`
 
 **Note**: Use parentheses! Especially with the negation operator. Use tables
 above and below as reference. Although precedence rules are used, sometimes
