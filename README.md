@@ -50,7 +50,7 @@ print(trutht.Truths(['x', 'y', 'z']))
 +-----+-----+-----+
 |  x  |  y  |  z  |
 |-----+-----+-----|
-| 0   |  0  |  0  |
+|  0  |  0  |  0  |
 |  0  |  0  |  1  |
 |  0  |  1  |  0  |
 |  0  |  1  |  1  |
@@ -106,84 +106,52 @@ If you prefer the words True and False instead of numbers 0 and 1, there is a
 third parameter, boolean type, `ints` that can be set to `False`:
 
 ```python
-print(ttg.Truths(['p', 'q'], ['p and q', 'p or q', '(p or (~q)) => (~p)'], ints=False))
+print(trutht.Truths(['x', 'y'], ['x and y', 'x or y', '(x or (not y)) imp (not x)'], ints=False))
 ```
 ```
-+-------+-------+-----------+----------+-----------------------+
-|   p   |   q   |  p and q  |  p or q  |  (p or (~q)) => (~p)  |
-|-------+-------+-----------+----------+-----------------------|
-| True  | True  |   True    |   True   |         False         |
-| True  | False |   False   |   True   |         False         |
-| False | True  |   False   |   True   |         True          |
-| False | False |   False   |  False   |         True          |
-+-------+-------+-----------+----------+-----------------------+
++-------+-------+-----------+----------+-----------------------------+
+|   x   |   y   |  x and y  |  x or y  |  (x or (not y)) imp (not x)  |
+|-------+-------+-----------+----------+-----------------------------|
+| False | False |   False   |   False  |            True             |
+| False | True  |   False   |   True   |            True             |
+| True  | False |   False   |   True   |            False            |
+| True  | True  |   True    |   True   |            False            |
++-------+-------+-----------+----------+-----------------------------+
 ```
 
 ### Formatting options with PrettyTable and Tabulate
 
 For more formatting options, let's create a truth table variable:
 ```python
-table = ttg.Truths(['p', 'q'], ['p => q', 'p = q'])
+table = trutht.Truths(['x', 'y'], ['x imp y', 'x equ y'])
 ```
 The command `print(table)` renders the standard table as seen on above examples:
 ```
-+-----+-----+----------+---------+
-|  p  |  q  |  p => q  |  p = q  |
-|-----+-----+----------+---------|
-|  1  |  1  |    1     |    1    |
-|  1  |  0  |    0     |    0    |
-|  0  |  1  |    1     |    0    |
-|  0  |  0  |    1     |    1    |
-+-----+-----+----------+---------+
++-----+-----+----------+------------+
+|  x  |  y  |  x imp y  |  x equ y  |
+|-----+-----+----------+------------|
+|  0  |  0  |     1     |     1     |
+|  0  |  1  |     1     |     0     |
+|  1  |  0  |     0     |     0     |
+|  1  |  1  |     1     |     1     |
++-----+-----+----------+------------+
 ```
 The command `print(table.as_prettytable())` renders the table with PrettyTable
 package as on the original version of this package:
 ```
-+---+---+--------+-------+
-| p | q | p => q | p = q |
-+---+---+--------+-------+
-| 1 | 1 |   1    |   1   |
-| 1 | 0 |   0    |   0   |
-| 0 | 1 |   1    |   0   |
-| 0 | 0 |   1    |   1   |
-+---+---+--------+-------+
++---+---+---------+---------+
+| x | y | x imp y | x equ y |
++---+---+---------+---------+
+| 0 | 0 |    1    |    1    |
+| 0 | 1 |    1    |    0    |
+| 1 | 0 |    0    |    0    |
+| 1 | 1 |    1    |    1    |
++---+---+---------+---------+
 ```
 As can be seen, the PrettyTable output has less blank spaces. However, the
 PrettyTable package has much less output options and it is deprecated. So I
 decided to use the Tabulate package as standard.
 
-The command `print(table.as_tabulate())` renders the table with Tabulate
-package. The first column presents line numbers (that can be disabled with
-the parameter `index=False`):
-```
-+----+-----+-----+----------+---------+
-|    |  p  |  q  |  p => q  |  p = q  |
-|----+-----+-----+----------+---------|
-| 1  |  1  |  1  |    1     |    1    |
-| 2  |  1  |  0  |    0     |    0    |
-| 3  |  0  |  1  |    1     |    0    |
-| 4  |  0  |  0  |    1     |    1    |
-+----+-----+-----+----------+---------+
-```
-
-Using Tabulate, we can use any of the formats available. Let's output a LaTeX
-table without the line number column:
-
-```python
-print(table.as_tabulate(index=False, table_format='latex'))
-```
-```
-\begin{tabular}{cccc}
-\hline
-  p  &  q  &  p =\ensuremath{>} q  &  p = q  \\
-\hline
-  1  &  1  &    1     &    1    \\
-  1  &  0  &    0     &    0    \\
-  0  &  1  &    1     &    0    \\
-  0  &  0  &    1     &    1    \\
-\hline
-\end{tabular}
-```
 
 ### Formatting options with Pandas
 
@@ -207,18 +175,18 @@ highlighted with yellow background and different colors for True and False.
 
 Let's see the how to use the `valuation` function with a new truth table:
 ```python
-table_val = ttg.Truths(['p', 'q'], ['p = q', 'p and (~p)', '(p and q) => p'])
+table_val = trutht.Truths(['x', 'y'], ['x = y', 'x and (not x)', '(x and y) => x'])
 print(table_val)
 ```
 ```
-+-----+-----+---------+--------------+------------------+
-|  p  |  q  |  p = q  |  p and (~p)  |  (p and q) => p  |
-|-----+-----+---------+--------------+------------------|
-|  1  |  1  |    1    |      0       |        1         |
-|  1  |  0  |    0    |      0       |        1         |
-|  0  |  1  |    0    |      0       |        1         |
-|  0  |  0  |    1    |      0       |        1         |
-+-----+-----+---------+--------------+------------------+
++-----+-----+-----------+-----------------+------------------+
+|  x  |  y  |  x equ y  |  x and (not x)  |  (x and y) imp x |
+|-----+-----+-----------+-----------------+------------------|
+|  0  |  0  |     1     |        0        |        1         |
+|  0  |  1  |     0     |        0        |        1         |
+|  1  |  0  |     0     |        0        |        1         |
+|  1  |  1  |     1     |        0        |        1         |
++-----+-----+---------+-------------------+------------------+
 ```
 Without arguments, the `valuation` function classifies the *last column* as a
 tautology, a contradiction or a contingency:
@@ -250,7 +218,7 @@ For those who work in the terminal there is a simple command line interface
 the following syntax according to its `--help`:
 
 ```
-usage: ttg_cli.py [-h] [-p PROPOSITIONS] [-i INTS] variables
+usage: trutht_cli.py [-h] [-p PROPOSITIONS] [-i INTS] variables
 
 positional arguments:
   variables             List of variables e. g. "['p', 'q']"
@@ -266,79 +234,21 @@ As seen, the list of variables is mandatory. Note that the lists must be between
 `"`.
 
 ```bash
-$ ttg_cli.py "['p', 'q', 'r']"
+$ trutht_cli.py "['x', 'y', 'z']"
 ```
 ```
 +-----+-----+-----+
-|  p  |  q  |  r  |
+|  x  |  y  |  z  |
 |-----+-----+-----|
-|  1  |  1  |  1  |
-|  1  |  1  |  0  |
-|  1  |  0  |  1  |
-|  1  |  0  |  0  |
-|  0  |  1  |  1  |
-|  0  |  1  |  0  |
-|  0  |  0  |  1  |
 |  0  |  0  |  0  |
+|  0  |  0  |  1  |
+|  0  |  1  |  0  |
+|  0  |  1  |  1  |
+|  1  |  0  |  0  |
+|  1  |  0  |  1  |
+|  1  |  1  |  0  |
+|  1  |  1  |  1  |
 +-----+-----+-----+
-```
-
-The CLI utility also has an option, `-i`, to show words instead of numbers:
-```bash
-$ ttg_cli.py "['p', 'q', 'r']" -i False
-```
-```
-+-------+-------+-------+
-|   p   |   q   |   r   |
-|-------+-------+-------|
-| True  | True  | True  |
-| True  | True  | False |
-| True  | False | True  |
-| True  | False | False |
-| False | True  | True  |
-| False | True  | False |
-| False | False | True  |
-| False | False | False |
-+-------+-------+-------+
-```
-
-A `-p` parameter must be before the propositions list:
-```bash
-$ ttg_cli.py "['p', 'q', 'r']" -p "['p or q', 'p and q or r']"
-```
-```
-+-----+-----+-----+----------+----------------+
-|  p  |  q  |  r  |  p or q  |  p and q or r  |
-|-----+-----+-----+----------+----------------|
-|  1  |  1  |  1  |    1     |       1        |
-|  1  |  1  |  0  |    1     |       1        |
-|  1  |  0  |  1  |    1     |       1        |
-|  1  |  0  |  0  |    1     |       0        |
-|  0  |  1  |  1  |    1     |       1        |
-|  0  |  1  |  0  |    1     |       0        |
-|  0  |  0  |  1  |    0     |       1        |
-|  0  |  0  |  0  |    0     |       0        |
-+-----+-----+-----+----------+----------------+
-```
-
-With words instead of numbers:
-
-```bash
-$ ttg_cli.py "['p', 'q', 'r']" -p "['p or q', 'p and q or r']" -i False
-```
-```
-+-------+-------+-------+----------+----------------+
-|   p   |   q   |   r   |  p or q  |  p and q or r  |
-|-------+-------+-------+----------+----------------|
-| True  | True  | True  |   True   |      True      |
-| True  | True  | False |   True   |      True      |
-| True  | False | True  |   True   |      True      |
-| True  | False | False |   True   |     False      |
-| False | True  | True  |   True   |      True      |
-| False | True  | False |   True   |     False      |
-| False | False | True  |  False   |      True      |
-| False | False | False |  False   |     False      |
-+-------+-------+-------+----------+----------------+
 ```
 
 The real look of the table depends on your terminal appearance configuration.
@@ -371,18 +281,3 @@ Feel free to submit issues regarding:
 ## License
 
 Apache 2.0, see [LICENSE](LICENSE)
-
-## Citing
-
-If you use *truth-table-generator* in a scientific publication or in classes,
-please consider citing as
-
-F. L. S. Bustamante, *truth-table-generator* - generating truth tables., 2019 -
-Available at: https://github.com/chicolucio/truth-table-generator
-
-## Funding
-
-If you enjoy this project and would like to see many more math and science
-related programming projects, I would greatly appreciate any assistance. Send me
-an e-mail to know how to assist. Many more projects are to come and your support
-will be rewarded with more STEM coding projects :-)
