@@ -156,20 +156,7 @@ decided to use the Tabulate package as standard.
 ### Formatting options with Pandas
 
 With an IPython terminal or a Jupyter Notebook, it is possible to render a Pandas
-DataFrame with `table.as_pandas()`:
-
-![pandas01](https://raw.githubusercontent.com/chicolucio/truth-table-generator/master/images/pandas01.png)
-
-And this output can be modified with Pandas Styling
-
-![pandas02](https://raw.githubusercontent.com/chicolucio/truth-table-generator/master/images/pandas02.png)
-
-More advanced modifications can be done with functions that apply styling changes.
-See the [styles tutorial notebook](styling_tutorial.ipynb) for examples.
-See the image below for a fancy example with two lines and two columns
-highlighted with yellow background and different colors for True and False.
-
-![pandas03](https://raw.githubusercontent.com/chicolucio/truth-table-generator/master/images/pandas03.png)
+DataFrame with `table.as_pandas()`
 
 ### The `valuation` function
 
